@@ -22,8 +22,6 @@ const AppImagePicker=({name})=> {
       quality: 1
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       let id;
 
@@ -32,7 +30,7 @@ const AppImagePicker=({name})=> {
       }else{
         id=values[name].length+1
       }
-      setFieldValue(name, values[name].concat({id,uri:result.uri}))
+      setFieldValue(name, values[name].concat({id,url:result.uri}))
       
     }
   };

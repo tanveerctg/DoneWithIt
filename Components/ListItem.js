@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View,Image,TouchableHighlight} from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function ListItem({image,icon,title,subTitle,style,renderRightActions,onPress}) {
     return (
@@ -8,16 +9,17 @@ export default function ListItem({image,icon,title,subTitle,style,renderRightAct
           <TouchableHighlight
             underlayColor="#DDDDDD"
             onPress={onPress}>
-
-            <View style={[styles.listContainer,style]}>
-              {icon && icon}
-              {image && <Image source={image} style={styles.clientPic}/>}
-              <View style={styles.listDetails}> 
-                <Text style={styles.title}>{title}</Text>
-               {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
+            <View style={[styles.container,style]}>
+              <View style={[styles.listContent]}>
+                  {icon && icon}
+                  {image && <Image source={image} style={styles.clientPic}/>}
+                  <View style={styles.listDetails}> 
+                    <Text style={styles.title}>{title}</Text>
+                  {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
+                  </View>
               </View>
+                <MaterialIcons name="chevron-right" size={22} color="black" />
             </View>
-
           </TouchableHighlight>
       </Swipeable>
 
@@ -25,10 +27,15 @@ export default function ListItem({image,icon,title,subTitle,style,renderRightAct
 }
 
 const styles = StyleSheet.create({
-    listContainer:{
+      container:{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
         paddingTop:10,
         paddingBottom:10,
-        paddingHorizontal:15,
+        paddingHorizontal:15
+      },
+      listContent:{
         flexDirection:"row",
         alignItems:"center"
       },

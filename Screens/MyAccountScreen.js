@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import {StyleSheet,FlatList, View } from "react-native";
 import {useState} from "react"
 
@@ -7,6 +7,9 @@ import Icon from '../Components/Icon';
 import Screen from '../Components/Screen'
 import ListItem from '../Components/ListItem'
 import MessageScreen from '../Screens/MessagesScreen'
+import AuthContext from "../auth/authContext";
+import authStore from "../auth/authStore"
+import useAuth from "../auth/useAuth"
 
 const Data = [
   {
@@ -19,18 +22,21 @@ const Data = [
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
     title: 'My Messages',
     icon:"email",
-    bg:"#18b287"
+    bg:"#18b287",
+    target:"Messages"
   }
 ];
 
-const App=()=> {
+const App=({navigation})=> {
   const [info,setInfo]=useState(Data)
+  const {user,logOut} = useAuth();
+
   return(
     <Screen style={{backgroundColor:"#f1efeb"}}>
       <View>
         <ListItem 
-          title="Tanveer" 
-          subTitle="tanveerctg2014@gmail.com" 
+          title={user.name} 
+          subTitle={user.email} 
           image={require('../assets/mosh.jpg')}
           style={{backgroundColor:"#ffffff"}}
         />
@@ -43,7 +49,7 @@ const App=()=> {
                 title={item.title}
                 icon={<Icon icon={item.icon} style={{backgroundColor:item.bg}} />}
                 style={{backgroundColor:"#ffffff"}}
-                
+                onPress={()=>navigation.navigate(item.target)}
                 />  
               }
               keyExtractor={item => item.id}
@@ -52,8 +58,11 @@ const App=()=> {
 
         <ListItem 
           title="Log Out" 
-          icon={<Icon icon="logout" color="black" style={{backgroundColor:"#f6ff00"}} />}
+          icon={<Icon icon="email" color="black" style={{backgroundColor:"#f6ff00"}} />}
           style={{backgroundColor:"#ffffff"}}
+          onPress={()=>{
+           logOut()
+          }}    
         />
       </View>
     </Screen>

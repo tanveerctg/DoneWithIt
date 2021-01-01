@@ -1,19 +1,20 @@
 import React from 'react'
 import ListItem from '../Components/ListItem'
-import { StyleSheet, Text, View,Image } from 'react-native'
+import { StyleSheet, Text, View,Image,ScrollView } from 'react-native'
 
-export default function ListingDetailsScreen({productName,price}) {
+export default function ListingDetailsScreen({route}) {
+    const item=route.params;
     return (
-        <View>
+        <ScrollView>
             <View style={styles.card}>
-              <Image source={require('../assets/jacket.jpg')} style={styles.image}/>
+              <Image source={{uri:item.images[0].url}} style={styles.image}/>
               <View style={styles.details}>
-                <Text style={styles.productName}>{productName}</Text>
-                <Text style={styles.price}>{price}</Text> 
+                <Text style={styles.productName}>{item.title}</Text>
+                <Text style={styles.price}>{item.subTitle}</Text> 
               </View>
             </View>
-            <ListItem image={require('../assets/mosh.jpg')} name="Mosh Hamedani" listing="5 Listings"/>
-         </View>
+            <ListItem image={require('../assets/mosh.jpg')} title="Mosh Hamedani" subTitle="5 Listings"/>
+         </ScrollView>
     )
 }
 

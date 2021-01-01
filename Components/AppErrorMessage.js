@@ -2,11 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import AppText from './AppText'
 
-export default function AppErrorMessage({error,visible}) {
+export default function AppErrorMessage({error,visible,style}) {
     if(!error || !visible){
         return null
     }
-    return <AppText style={styles.container}>{error}</AppText>
+    return <AppText style={[styles.container,style]}>{error}</AppText>
 }
 
 const styles = StyleSheet.create({

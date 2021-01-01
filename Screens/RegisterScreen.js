@@ -1,45 +1,53 @@
-import React,{useState,useContext,useEffect} from 'react'
+import React,{useState} from 'react'
 import { StyleSheet, Text, View,Image } from 'react-native'
 import * as yup from 'yup'; 
-import jwt_decode from "jwt-decode";
-
 
 import Screen from "../Components/Screen"
+import AppErrorMessage from '../Components/AppErrorMessage';
 import AppForm from '../Components/AppForm'
 import AppFormField from '../Components/AppFormField'
 import SubmitBtn from '../Components/AppFormSubmitBtn'
-import AppErrorMessage from '../Components/AppErrorMessage';
 import authApi from "../api/auth"
-import AuthContext from '../auth/authContext';
-import authStore from "../auth/authStore"
 import useAuth from "../auth/useAuth"
 import useApi from "../hooks/useApi"
+import Loading from '../Components/Loading';
 
-export default function LoginScreen() {
-
-    const [loginFailed,setLoginFailed]=useState(false)
-    const {user,setUser,logIn} = useAuth();
-    const loginApi=useApi(authApi.login);
+export default function RegisterScreen() {
+    const [registerFailed,setRegisterFailed]=useState(false)
+    const [errorMessage,setErrorMessage]=useState(null)
+    const {register} = useAuth();
+    const registerApi=useApi(authApi.register);
 
     let loginSchema = yup.object().shape({
-        email: yup.string().required("Email is a required field.").email("Email must be valid."),
-        password:yup.string().required("Password is a required field.").min(5,"Password must be at least 6 characters.")
+        name: yup.string().required("Name can't be empty"),
+        email: yup.string().required("Email is a required field").email("Email must be valid."),
+        password:yup.string().required("Password is a required field").min(6,"Password must be at least 6 characters.")
     });
+    const handleSubmit=async (values)=>{
 
-    const handleSubmit=async ({email,password})=>{
-    
-        const response=await loginApi.request(email,password)
-        if(!response.ok) return setLoginFailed(true)
-        setLoginFailed(false)
-        logIn(response)
-        
+        const response=await registerApi.request(values)
+
+        if(!response.ok){
+          setErrorMessage(response.data.error)
+          return setRegisterFailed(true)
+        }
+
+        register(response)
     }
     return (
         <Screen>
             <View style={styles.container}>
-                <Image source={require('../assets/logo-red.png')} style={styles.logo}/>
-                <AppErrorMessage error="Email or Password not valid" visible={loginFailed} style={{marginBottom:5}}/>
-                <AppForm initialValues={{email: '',password:''}} schema={loginSchema} onSubmit={handleSubmit}>
+                <AppErrorMessage error={errorMessage} visible={registerFailed} style={{marginBottom:5}}/>
+                <AppForm initialValues={{name:'',email: '',password:''}} schema={loginSchema} onSubmit={handleSubmit}>
+                    <AppFormField
+                        name="name"
+                        type="name"
+                        placeholder="Name"
+                        icon="account-circle"
+                        autoCapitalize="none"
+                        autoCompleteType="off" 
+                        autoCorrect={false}
+                    />  
                     <AppFormField
                         name="email"
                         type="email"
@@ -59,6 +67,7 @@ export default function LoginScreen() {
                         secureTextEntry
                     />   
                     <SubmitBtn/>
+                    <Loading visible={registerApi.loading}/>
                 </AppForm>
             </View>
         </Screen>

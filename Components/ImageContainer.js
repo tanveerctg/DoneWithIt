@@ -9,7 +9,7 @@ export default function ImageContainer({imageLists,onPress}) {
                 && 
                 imageLists.map((image,index)=>
                     <TouchableWithoutFeedback onPress={()=>onPress(image.id)} key={index}>
-                        <Image source={{ uri: image.uri }} style={{ width: 92, height:92,borderRadius:8,marginRight:10,marginBottom:10 }} />
+                        <Image source={{ uri: image.url }} style={{ width: 92, height:92,borderRadius:8,marginRight:10,marginBottom:10 }} />
                     </TouchableWithoutFeedback>
                 )
             }
